@@ -45,13 +45,13 @@ RUN apt-get update \
     libgeos-dev \
     python3-enchant
 
-COPY --chown=dependabot:dependabot python/helpers /opt/python/helpers
+COPY --chown=cvescan:cvescan python/helpers /opt/python/helpers
 USER root
 ENV PYENV_ROOT=/usr/local/.pyenv \
   PATH="/usr/local/.pyenv/bin:$PATH"
-RUN mkdir -p "$PYENV_ROOT" && chown dependabot:dependabot "$PYENV_ROOT"
-USER dependabot
-ENV DEPENDABOT_NATIVE_HELPERS_PATH="/opt"
+RUN mkdir -p "$PYENV_ROOT" && chown cvescan:cvescan "$PYENV_ROOT"
+USER cvescan
+ENV CVESCAN_NATIVE_HELPERS_PATH="/opt"
 RUN git -c advice.detachedHead=false clone https://github.com/pyenv/pyenv.git --branch $PYENV_VERSION --single-branch --depth=1 /usr/local/.pyenv
 
 FROM python-core as python-3.10
@@ -115,12 +115,12 @@ RUN apt-get update \
     python3-enchant
 
 ### PYTHON
-COPY --chown=dependabot:dependabot python/helpers /opt/python/helpers
+COPY --chown=cvescan:cvescan python/helpers /opt/python/helpers
 USER root
 ENV PYENV_ROOT=/usr/local/.pyenv \
   PATH="/usr/local/.pyenv/bin:$PATH"
-RUN mkdir -p "$PYENV_ROOT" && chown dependabot:dependabot "$PYENV_ROOT"
-USER dependabot
+RUN mkdir -p "$PYENV_ROOT" && chown cvescan:cvescan "$PYENV_ROOT"
+USER cvescan
 ENV DEPENDABOT_NATIVE_HELPERS_PATH="/opt"
 RUN git -c advice.detachedHead=false clone https://github.com/pyenv/pyenv.git --branch $PYENV_VERSION --single-branch --depth=1 /usr/local/.pyenv
 RUN pyenv install $PY_3_11 \
@@ -131,4 +131,4 @@ COPY --from=python-3.10 /usr/local/.pyenv/3.10.tar.gz /usr/local/.pyenv/3.10.tar
 COPY --from=python-3.9 /usr/local/.pyenv/3.9.tar.gz /usr/local/.pyenv/3.9.tar.gz
 COPY --from=python-3.8 /usr/local/.pyenv/3.8.tar.gz /usr/local/.pyenv/3.8.tar.gz
 COPY --from=python-3.7 /usr/local/.pyenv/3.7.tar.gz /usr/local/.pyenv/3.7.tar.gz
-COPY --chown=dependabot:dependabot python /home/dependabot/python
+COPY --chown=cvescan:cvescan python /home/cvescan/python
